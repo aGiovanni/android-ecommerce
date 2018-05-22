@@ -34,5 +34,5 @@
         app:layout_constraintEnd_toEndOf="@+id/categoryImage"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="HATS" />
+        tools:text="DIGITAL" />
 </android.support.constraint.ConstraintLayout>
