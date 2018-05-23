@@ -3,6 +3,7 @@ package com.example.alan.e_commerce.Controller
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import com.example.alan.e_commerce.Adapters.CategoryAdapter
 import com.example.alan.e_commerce.Model.Category
 import com.example.alan.e_commerce.R
