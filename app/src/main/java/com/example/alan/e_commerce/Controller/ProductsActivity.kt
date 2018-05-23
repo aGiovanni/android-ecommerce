@@ -20,15 +20,19 @@ class ProductsActivity : AppCompatActivity() {
 
         val categoryType = intent.getStringExtra(EXTRA_CATEGORY)
 
+        title = "Products - $categoryType"
+
         var spanCount = 2
 
         val orientation = resources.configuration.orientation
-        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            spanCount = 3
-        }
-
         val screenSize = resources.configuration.screenWidthDp
+
         if (screenSize > 720) {
+            spanCount = 3
+            if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                spanCount = 4
+            }
+        } else if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
             spanCount = 3
         }
 
