@@ -11,7 +11,6 @@ import com.example.alan.e_commerce.Model.Product
 import com.example.alan.e_commerce.R
 
 class ProductsAdapter (val context: Context, val products: List<Product>) : RecyclerView.Adapter<ProductsAdapter.ProductHolder> () {
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.product_list_item, parent, false)
         return ProductHolder(view)
