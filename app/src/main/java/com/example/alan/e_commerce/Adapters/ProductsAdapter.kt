@@ -10,10 +10,10 @@ import android.widget.TextView
 import com.example.alan.e_commerce.Model.Product
 import com.example.alan.e_commerce.R
 
-class ProductsAdapter (val context: Context, val products: List<Product>) : RecyclerView.Adapter<ProductsAdapter.ProductHolder> () {
+class ProductsAdapter (val context: Context, val products: List<Product>, val itemClick : (Product) -> Unit) : RecyclerView.Adapter<ProductsAdapter.ProductHolder> () {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.product_list_item, parent, false)
-        return ProductHolder(view)
+        return ProductHolder(view, itemClick)
     }
 
     override fun getItemCount(): Int {
@@ -24,16 +24,18 @@ class ProductsAdapter (val context: Context, val products: List<Product>) : Recy
         holder.bindProduct(products[position], context)
     }
 
-    inner class ProductHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
+    inner class ProductHolder(itemView: View?, val itemClick: (Product) -> Unit) : RecyclerView.ViewHolder(itemView) {
         val productImage = itemView?.findViewById<ImageView>(R.id.productImage)
         val productName = itemView?.findViewById<TextView>(R.id.productName)
         val productPrice = itemView?.findViewById<TextView>(R.id.productPrice)
 
         fun bindProduct (product: Product, context: Context) {
-            val resourceId = context.resources.getIdentifier(product.image, "drawable", context.packageName)
+            val resourceId = context.resources.getIdentifier(product.image,
+                    "drawable", context.packageName)
             productImage?.setImageResource(resourceId)
             productName?.text = product.title
             productPrice?.text = product.price
+            itemView.setOnClickListener { itemClick(product) }
         }
     }
 }

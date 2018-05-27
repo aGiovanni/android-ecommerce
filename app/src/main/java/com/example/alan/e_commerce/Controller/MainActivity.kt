@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.SearchView
 import android.view.Menu
-import android.view.MenuItem
 import android.widget.Toast
 import com.example.alan.e_commerce.Adapters.CategoryRecycleAdapter
 import com.example.alan.e_commerce.R
@@ -29,14 +28,15 @@ class MainActivity : AppCompatActivity() {
 
         adapter = CategoryRecycleAdapter(this, DataService.categories) { category ->
             val productIntent = Intent(this, ProductsActivity::class.java)
-            productIntent.putExtra(EXTRA_CATEGORY, category.title)
+            productIntent.putExtra(EXTRA_CATEGORY, category.title.toLowerCase())
             startActivity(productIntent)
         }
         categoryListView.adapter = adapter
 
         val layoutManager = LinearLayoutManager(this)
         categoryListView.layoutManager = layoutManager
-        categoryListView.setHasFixedSize(true)
+        // Cuestiones de Optimización
+        // categoryListView.setHasFixedSize(true)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -49,22 +49,35 @@ class MainActivity : AppCompatActivity() {
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
 
             override fun onQueryTextSubmit(query: String?): Boolean {
-                Toast.makeText(applicationContext, "Se buscó $query", Toast.LENGTH_SHORT).show()
-                return false
+                if (query?.length!! > 0) {
+                    val productIntent = Intent(applicationContext, ProductsActivity::class.java)
+                    productIntent.putExtra(EXTRA_CATEGORY, query)
+                    startActivity(productIntent)
+                } else {
+                    Toast.makeText(applicationContext, "Ingrese algo en la búsqueda", Toast.LENGTH_SHORT).show()
+                }
+                return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                return false
-            }
-        })
-
-        searchView.setOnCloseListener(object : SearchView.OnCloseListener {
-            override fun onClose(): Boolean {
-                Toast.makeText(applicationContext, "Se cerró text", Toast.LENGTH_SHORT).show()
-                return false
+                return newText?.length!! > 0
             }
         })
 
         return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        if (Intent.ACTION_SEARCH.equals(intent?.action)) {
+            val query = intent?.getStringExtra(SearchManager.QUERY)
+            if (query?.length!! > 0) {
+                val productIntent = Intent(applicationContext, ProductsActivity::class.java)
+                productIntent.putExtra(EXTRA_CATEGORY, query)
+                startActivity(productIntent)
+            } else {
+                Toast.makeText(applicationContext, "Ingrese algo en la búsqueda", Toast.LENGTH_SHORT).show()
+            }
+       }
+        super.onNewIntent(intent)
     }
 }

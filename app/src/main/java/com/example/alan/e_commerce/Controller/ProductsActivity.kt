@@ -1,14 +1,19 @@
 package com.example.alan.e_commerce.Controller
 
+import android.content.Intent
 import android.content.res.Configuration
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v4.app.NavUtils
+import android.support.v4.app.TaskStackBuilder
 import android.support.v7.app.ActionBar
 import android.support.v7.widget.GridLayoutManager
+import android.view.MenuItem
 import com.example.alan.e_commerce.Adapters.ProductsAdapter
 import com.example.alan.e_commerce.R
 import com.example.alan.e_commerce.Services.DataService
 import com.example.alan.e_commerce.Utilities.EXTRA_CATEGORY
+import com.example.alan.e_commerce.Utilities.EXTRA_PRODUCT
 import kotlinx.android.synthetic.main.activity_products.*
 
 class ProductsActivity : AppCompatActivity() {
@@ -38,7 +43,13 @@ class ProductsActivity : AppCompatActivity() {
             spanCount = 3
         }
 
-        adapter = ProductsAdapter(this, DataService.getProducts(categoryType))
+        adapter = ProductsAdapter(this, DataService.getProducts(categoryType)) { product ->
+            println("${product.title} + ${product.category}")
+            val showProductIntent = Intent(this, ProductActivity::class.java)
+            showProductIntent.putExtra(EXTRA_PRODUCT, product)
+            showProductIntent.putExtra(EXTRA_CATEGORY, categoryType)
+            startActivity(showProductIntent)
+        }
         val layoutManager = GridLayoutManager(this, spanCount)
 
         productsListView.layoutManager = layoutManager
