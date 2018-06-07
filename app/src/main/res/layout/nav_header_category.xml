@@ -15,7 +15,7 @@
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:layout_marginBottom="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="4dp"
         android:paddingTop="8dp"
         app:layout_constraintBottom_toTopOf="@+id/loginBtnNavHeader"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,6 +26,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
         android:paddingTop="8dp"
         android:text="Alan Giovanni"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
@@ -39,21 +40,26 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="alan_giovanni@protonmail.com"
+        android:textAlignment="viewStart"
+        android:textAllCaps="false"
+        android:textSize="12sp"
         app:layout_constraintStart_toEndOf="@+id/userImageNavHeader"
         app:layout_constraintTop_toBottomOf="@+id/userNameNavHeader"
         tools:text="alan_giovanni@protonmail.com" />
 
     <Button
         android:id="@+id/loginBtnNavHeader"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="32dp"
         android:layout_marginBottom="8dp"
-        android:layout_marginStart="24dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         android:background="@android:color/transparent"
         android:onClick="loginBtnNavHeaderClicked"
-        android:text="Login"
+        android:text="Iniciar Sesión"
         android:textAlignment="viewStart"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

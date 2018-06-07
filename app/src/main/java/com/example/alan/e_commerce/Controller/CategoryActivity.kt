@@ -17,7 +17,7 @@ import com.example.alan.e_commerce.R
 import com.example.alan.e_commerce.Services.DataService
 import com.example.alan.e_commerce.Utilities.EXTRA_CATEGORY
 import kotlinx.android.synthetic.main.activity_category.*
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.content_category.*
 
 class CategoryActivity : AppCompatActivity() {
 
@@ -97,6 +97,7 @@ class CategoryActivity : AppCompatActivity() {
     }
 
     fun loginBtnNavHeaderClicked (view: View) {
-
+        val login = Intent(this, LoginActivity::class.java)
+        startActivity(login)
     }
 }

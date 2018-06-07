@@ -1,5 +1,6 @@
 package com.example.alan.e_commerce.Controller
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -18,6 +19,7 @@ class ProductActivity : AppCompatActivity() {
     lateinit var product : Product
     lateinit var categoryType : String
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_product)
@@ -36,8 +38,8 @@ class ProductActivity : AppCompatActivity() {
                 "drawable", packageName)
         productImage?.setImageResource(resourceId)
         productName?.text = product.title
-        productCategory?.text = product.category
-        productPrice?.text = product.price
+        productCategory?.text = "Categoría: " + product.category
+        productPrice?.text = "Precio: " + product.price
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

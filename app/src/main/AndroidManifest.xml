@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.alan.e_commerce">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -15,6 +17,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.SEARCH" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
@@ -22,13 +25,15 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
+
         <activity
             android:name=".Controller.ProductsActivity"
-            android:parentActivityName=".Controller.MainActivity">
+            android:parentActivityName=".Controller.LoginActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Controller.CategoryActivity" />
         </activity>
+
         <activity
             android:name=".Controller.ProductActivity"
             android:parentActivityName=".Controller.ProductsActivity">
@@ -36,8 +41,22 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Controller.CategoryActivity" />
         </activity>
+
         <activity
-            android:name=".Controller.MainActivity"></activity>
+            android:name=".Controller.LoginActivity"
+            android:parentActivityName=".Controller.CategoryActivity">
+            <meta-data
+                android:name="android.support.parent_activity"
+                android:value=".controller.categoryactivity" />
+        </activity>
+
+        <activity
+            android:name=".Controller.RegisterActivity"
+            android:parentActivityName=".Controller.LoginActivity">
+            <meta-data
+                android:name="android.support.parent_activity"
+                android:value=".controller.categoryactivity" />
+        </activity>
     </application>
 
 </manifest>
