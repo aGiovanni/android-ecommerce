@@ -26,11 +26,16 @@
             <include layout="@layout/nav_header_category"
                 android:id="@+id/nav_drawer_header_include"/>
 
-            <ListView
-                android:id="@+id/drawer_list"
+            <Button
+                android:id="@+id/cartBtnNavHeader"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@id/nav_drawer_header_include"/>
+                android:layout_height="wrap_content"
+                android:paddingLeft="14dp"
+                android:gravity="center|left"
+                android:layout_below="@+id/nav_drawer_header_include"
+                android:background="@android:color/transparent"
+                android:text="Compras"
+                tools:ignore="RtlHardcoded" />
 
         </RelativeLayout>
 

@@ -13,7 +13,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".Controller.CategoryActivity"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="stateAlwaysHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.SEARCH" />
@@ -46,16 +47,16 @@
             android:name=".Controller.LoginActivity"
             android:parentActivityName=".Controller.CategoryActivity">
             <meta-data
-                android:name="android.support.parent_activity"
-                android:value=".controller.categoryactivity" />
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Controller.CategoryActivity" />
         </activity>
 
         <activity
             android:name=".Controller.RegisterActivity"
             android:parentActivityName=".Controller.LoginActivity">
             <meta-data
-                android:name="android.support.parent_activity"
-                android:value=".controller.categoryactivity" />
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Controller.LoginActivity" />
         </activity>
     </application>
 

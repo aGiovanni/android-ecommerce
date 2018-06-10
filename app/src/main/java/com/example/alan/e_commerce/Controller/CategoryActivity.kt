@@ -1,9 +1,12 @@
 package com.example.alan.e_commerce.Controller
 
 import android.app.SearchManager
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
+import android.support.v4.content.LocalBroadcastManager
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
@@ -14,10 +17,15 @@ import android.view.View
 import android.widget.Toast
 import com.example.alan.e_commerce.Adapters.CategoryRecycleAdapter
 import com.example.alan.e_commerce.R
+import com.example.alan.e_commerce.Services.AuthService
 import com.example.alan.e_commerce.Services.DataService
+import com.example.alan.e_commerce.Services.UserDataService
+import com.example.alan.e_commerce.Utilities.BROADCAST_USER_DATA_CHANGE
 import com.example.alan.e_commerce.Utilities.EXTRA_CATEGORY
 import kotlinx.android.synthetic.main.activity_category.*
+import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.content_category.*
+import kotlinx.android.synthetic.main.nav_header_category.*
 
 class CategoryActivity : AppCompatActivity() {
 
@@ -30,20 +38,40 @@ class CategoryActivity : AppCompatActivity() {
         title = "Categories"
         setSupportActionBar(findViewById(R.id.toolbar))
 
-        adapter = CategoryRecycleAdapter(this, DataService.categories) { category ->
-            val productIntent = Intent(this, ProductsActivity::class.java)
-            productIntent.putExtra(EXTRA_CATEGORY, category.title.toLowerCase())
-            startActivity(productIntent)
-        }
-        categoryListView.adapter = adapter
-        val layoutManager = LinearLayoutManager(this)
-        categoryListView.layoutManager = layoutManager
-
 
         val toggle = ActionBarDrawerToggle(
                 this, drawer_layout, findViewById(R.id.toolbar), R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawer_layout.addDrawerListener(toggle)
         toggle.syncState()
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(userDataChangeReceiver,
+                IntentFilter(BROADCAST_USER_DATA_CHANGE))
+    }
+
+    override fun onResume() {
+        if (AuthService.isLoggedIn) {
+            adapter = CategoryRecycleAdapter(this, DataService.categories) { category ->
+                val productIntent = Intent(this, ProductsActivity::class.java)
+                productIntent.putExtra(EXTRA_CATEGORY, category.title.toLowerCase())
+                startActivity(productIntent)
+            }
+            categoryListView.adapter = adapter
+        } else {
+            categoryListView.adapter = null
+        }
+        val layoutManager = LinearLayoutManager(this)
+        categoryListView.layoutManager = layoutManager
+        super.onResume()
+    }
+
+    private val userDataChangeReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            if (AuthService.isLoggedIn) {
+                userNameNavHeader.text = UserDataService.name
+                userEmailNavHeader.text = UserDataService.email
+                loginBtnNavHeader.text = "Logout"
+            }
+        }
     }
 
     override fun onBackPressed() {
@@ -64,12 +92,16 @@ class CategoryActivity : AppCompatActivity() {
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
 
             override fun onQueryTextSubmit(query: String?): Boolean {
-                if (query?.length!! > 0) {
-                    val productIntent = Intent(applicationContext, ProductsActivity::class.java)
-                    productIntent.putExtra(EXTRA_CATEGORY, query)
-                    startActivity(productIntent)
+                if (AuthService.isLoggedIn) {
+                    if (query?.length!! > 0) {
+                        val productIntent = Intent(applicationContext, ProductsActivity::class.java)
+                        productIntent.putExtra(EXTRA_CATEGORY, query)
+                        startActivity(productIntent)
+                    } else {
+                        Toast.makeText(applicationContext, "Ingrese algo en la búsqueda", Toast.LENGTH_SHORT).show()
+                    }
                 } else {
-                    Toast.makeText(applicationContext, "Ingrese algo en la búsqueda", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext, "Inicie sesión para realizar búsquedas.", Toast.LENGTH_SHORT).show()
                 }
                 return true
             }
@@ -84,20 +116,36 @@ class CategoryActivity : AppCompatActivity() {
 
     override fun onNewIntent(intent: Intent?) {
         if (Intent.ACTION_SEARCH.equals(intent?.action)) {
-            val query = intent?.getStringExtra(SearchManager.QUERY)
-            if (query?.length!! > 0) {
-                val productIntent = Intent(applicationContext, ProductsActivity::class.java)
-                productIntent.putExtra(EXTRA_CATEGORY, query)
-                startActivity(productIntent)
+            if (AuthService.isLoggedIn) {
+                val query = intent?.getStringExtra(SearchManager.QUERY)
+                if (query?.length!! > 0) {
+                    val productIntent = Intent(applicationContext, ProductsActivity::class.java)
+                    productIntent.putExtra(EXTRA_CATEGORY, query)
+                    startActivity(productIntent)
+                } else {
+                    Toast.makeText(applicationContext, "Ingrese algo en la búsqueda", Toast.LENGTH_SHORT).show()
+                }
             } else {
-                Toast.makeText(applicationContext, "Ingrese algo en la búsqueda", Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, "Inicie sesión para realizar búsquedas.", Toast.LENGTH_SHORT).show()
             }
         }
         super.onNewIntent(intent)
     }
 
     fun loginBtnNavHeaderClicked (view: View) {
-        val login = Intent(this, LoginActivity::class.java)
-        startActivity(login)
+        if (AuthService.isLoggedIn) {
+            // log out
+            UserDataService.logout()
+            userNameNavHeader.text = "Inicie sesión"
+            userEmailNavHeader.text = "para ver las compras"
+            loginBtnNavHeader.text = "Iniciar sesión"
+            categoryListView.adapter = null
+            val layoutManager = LinearLayoutManager(this)
+            categoryListView.layoutManager = layoutManager
+        } else {
+            // log in
+            val login = Intent(this, LoginActivity::class.java)
+            startActivity(login)
+        }
     }
 }

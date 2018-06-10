@@ -1,10 +1,12 @@
 package com.example.alan.e_commerce.Controller
 
+import android.content.Context
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.content.LocalBroadcastManager
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import com.example.alan.e_commerce.R
 import com.example.alan.e_commerce.Services.AuthService
@@ -28,7 +30,7 @@ class RegisterActivity : AppCompatActivity() {
         val username = registerNameText.text.toString()
         val email = registerEmailText.text.toString()
         val password = registerPasswordText.text.toString()
-
+        hideKeyboard()
         if (username.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty()) {
             AuthService.registerUser(this, email, password) { registerSuccess ->
                 if (registerSuccess) {
@@ -73,4 +75,10 @@ class RegisterActivity : AppCompatActivity() {
         registerSubmitBtn.isEnabled = !enable
     }
 
+    fun hideKeyboard () {
+        val inputManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        if (inputManager.isAcceptingText) {
+            inputManager.hideSoftInputFromWindow(currentFocus.windowToken, 0)
+        }
+    }
 }
